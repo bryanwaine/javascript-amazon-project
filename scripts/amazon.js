@@ -1,6 +1,6 @@
 let productsHTML = "";
 
-products.forEach(({ id, image, name, rating, priceCents, quantity }) => {
+products.forEach(({ id, image, name, rating, priceCents }) => {
   productsHTML += `
       <div class="product-container">
         <div class="product-image-container">
@@ -80,8 +80,17 @@ document.querySelectorAll(".js-add-to-cart").forEach((button) => {
           priceCents,
           image,
           quantity,
-        });
+      });
+      
+      let totalCartQuantity = 0;
 
-    console.log(cart);
+      cart.forEach((item) => {
+        totalCartQuantity += +item.quantity
+      })
+
+      document.querySelector(".js-cart-quantity").textContent = totalCartQuantity
+ 
+      console.log(cart);
+      console.log(totalCartQuantity)
   });
 });
