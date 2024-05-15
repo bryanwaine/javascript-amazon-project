@@ -1,3 +1,5 @@
+import {cart} from "../data/cart.js";
+
 let productsHTML = "";
 
 products.forEach(({ id, image, name, rating, priceCents }) => {
@@ -38,6 +40,13 @@ products.forEach(({ id, image, name, rating, priceCents }) => {
           </select>
         </div>
         
+        <div class="product-spacer"></div>
+
+        <div class="added-to-cart js-added-to-cart-${id} ">
+          <img src="images/icons/checkmark.png">
+          Added
+        </div>
+
         <button class="add-to-cart-button button-primary js-add-to-cart"
         data-product-id="${id}"
         data-product-name="${name}" data-product-price="${priceCents}"
@@ -93,5 +102,20 @@ document.querySelectorAll(".js-add-to-cart").forEach((button) => {
     });
 
     document.querySelector(".js-cart-quantity").textContent = totalCartQuantity;
+
+    let timeout;
+
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+    document
+      .querySelector(`.js-added-to-cart-${id}`)
+      .classList.add("added-to-cart-visible");
+
+    timeout = setTimeout(() => {
+      document
+        .querySelector(`.js-added-to-cart-${id}`)
+        .classList.remove("added-to-cart-visible");
+    }, 2000);
   });
 });
