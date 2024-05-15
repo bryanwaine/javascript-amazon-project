@@ -24,7 +24,7 @@ products.forEach(({ id, image, name, rating, priceCents }) => {
         </div>
 
         <div class="product-quantity-container">
-          <select>
+          <select class="product-quantity js-quantity-selector-${id}">
             <option selected value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
@@ -42,7 +42,7 @@ products.forEach(({ id, image, name, rating, priceCents }) => {
         data-product-id="${id}"
         data-product-name="${name}" data-product-price="${priceCents}"
         data-product-image="${image}"
-        data-product-quantity="1"
+        data-product-quantity="${0}"
         >
           Add to cart
         </button>
@@ -53,16 +53,20 @@ products.forEach(({ id, image, name, rating, priceCents }) => {
 document.querySelector(".products-grid").innerHTML = productsHTML;
 
 document.querySelectorAll(".js-add-to-cart").forEach((button) => {
-  button.addEventListener("click", (event) => {
-      const {
+  button.addEventListener("click", () => {
+    const {
       productId: id,
       productName: name,
       productPrice: priceCents,
       productImage: image,
-      productQuantity: quantity,
-      } = button.dataset;
-      
-      console.log(button.dataset)
+      productQuantity,
+    } = button.dataset;
+
+    const quantitySelectorValue = Number(
+      document.querySelector(`.js-quantity-selector-${id}`).value
+    );
+
+    const quantity = Number(productQuantity) + quantitySelectorValue;
 
     let matchingCartItem;
 
@@ -73,24 +77,21 @@ document.querySelectorAll(".js-add-to-cart").forEach((button) => {
     });
 
     matchingCartItem
-      ? matchingCartItem.quantity++
+      ? (matchingCartItem.quantity += quantitySelectorValue)
       : cart.push({
           id,
           name,
           priceCents,
           image,
           quantity,
-      });
-      
-      let totalCartQuantity = 0;
+        });
 
-      cart.forEach((item) => {
-        totalCartQuantity += +item.quantity
-      })
+    let totalCartQuantity = 0;
 
-      document.querySelector(".js-cart-quantity").textContent = totalCartQuantity
- 
-      console.log(cart);
-      console.log(totalCartQuantity)
+    cart.forEach((item) => {
+      totalCartQuantity += item.quantity;
+    });
+
+    document.querySelector(".js-cart-quantity").textContent = totalCartQuantity;
   });
 });
