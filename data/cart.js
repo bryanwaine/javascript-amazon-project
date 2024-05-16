@@ -1,50 +1,48 @@
-export const cart = [];
+export const cart = [{
+    productId: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
+    quantity: 3
+}];
 
-export function addToCart(id, name, priceCents, image, quantity, quantitySelectorValue) {
-    let matchingCartItem;
-  
-    cart.forEach((item) => {
-      if (id === item.id) {
-        matchingCartItem = item;
-      }
-    });
-  
-    matchingCartItem
-      ? (matchingCartItem.quantity += quantitySelectorValue)
-      : cart.push({
-          id,
-          name,
-          priceCents,
-          image,
-          quantity,
-        });
-  
-    
-  }
-  
-  export function updateCartQuantity() {
-      let totalCartQuantity = 0;
-  
-    cart.forEach((item) => {
-      totalCartQuantity += item.quantity;
-    });
-  
-    document.querySelector(".js-cart-quantity").textContent = totalCartQuantity;
-  }
-  
-  export function displayAddedMessage(id) {
-    let timeout;
-  
-    if (timeout) {
-      clearTimeout(timeout);
+export function addToCart(productId, quantity, quantitySelectorValue) {
+  let matchingCartItem;
+
+  cart.forEach((item) => {
+    if (productId === item.productId) {
+      matchingCartItem = item;
     }
-    document
-      .querySelector(`.js-added-to-cart-${id}`)
-      .classList.add("added-to-cart-visible");
-  
-    timeout = setTimeout(() => {
-      document
-        .querySelector(`.js-added-to-cart-${id}`)
-        .classList.remove("added-to-cart-visible");
-    }, 2000);
+  });
+
+  matchingCartItem
+    ? (matchingCartItem.quantity += quantitySelectorValue)
+    : cart.push({
+        productId,
+        quantity,
+      });
+}
+
+export function updateCartQuantity() {
+  let totalCartQuantity = 0;
+
+  cart.forEach((item) => {
+    totalCartQuantity += item.quantity;
+  });
+
+  document.querySelector(".js-cart-quantity").textContent = totalCartQuantity;
+}
+
+export function displayAddedMessage(productId) {
+  let timeout;
+
+  if (timeout) {
+    clearTimeout(timeout);
   }
+  document
+    .querySelector(`.js-added-to-cart-${productId}`)
+    .classList.add("added-to-cart-visible");
+
+  timeout = setTimeout(() => {
+    document
+      .querySelector(`.js-added-to-cart-${productId}`)
+      .classList.remove("added-to-cart-visible");
+  }, 2000);
+}
