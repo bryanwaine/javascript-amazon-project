@@ -6,6 +6,8 @@ import {
 import { products } from "../data/products.js";
 import { formatMoney } from "./utils/money.js";
 
+updateCartQuantity();
+
 let productsHTML = "";
 
 products.forEach(({ id, image, name, rating, priceCents }) => {
@@ -66,7 +68,8 @@ products.forEach(({ id, image, name, rating, priceCents }) => {
 document.querySelector(".products-grid").innerHTML = productsHTML;
 
 document.querySelectorAll(".js-add-to-cart").forEach((button) => {
-  button.addEventListener("click", () => {
+    button.addEventListener("click", () => {
+      
     const { productId, productQuantity } = button.dataset;
 
     const quantitySelectorValue = Number(
