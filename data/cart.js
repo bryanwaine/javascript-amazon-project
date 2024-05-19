@@ -60,8 +60,7 @@ export function deleteCartItem(productId) {
     
 }
 
-
-export function updateCartSummary() {
-  const cartSummary = document.querySelector(".js-cart-summary");
-  cartSummary.innerHTML = cartSummaryHTML;
-}
+export function updateCartHeaderCount() {
+    document.querySelector(".js-return-to-home-link").textContent =
+      cart.length === 1 ? `${cart.length} item` : `${cart.length} items`;
+  }
