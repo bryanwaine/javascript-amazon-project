@@ -1,9 +1,13 @@
 export const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
+export function saveToStorage(cart) {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }
+
 export function addToCart(productId, quantity, quantitySelectorValue) {
   let matchingCartItem;
 
-  let cartArr = JSON.parse(localStorage.getItem("cart")) || [];
+  let cartArr = cart
 
   cartArr.forEach((item) => {
     if (productId === item.productId) {
@@ -18,23 +22,40 @@ export function addToCart(productId, quantity, quantitySelectorValue) {
         quantity,
       });
 
-  localStorage.setItem("cart", JSON.stringify(cartArr));
+  saveToStorage(cartArr);
 }
+
+export function calculateCartQuantity() {
+    let totalCartQuantity = 0;
+  
+    let cartArr = JSON.parse(localStorage.getItem("cart"));
+  
+    cartArr &&
+      cartArr.forEach((item) => {
+        totalCartQuantity += item.quantity;
+      });
+  
+    return totalCartQuantity;
+  }
+  
 
 export function updateCartQuantity() {
-  let totalCartQuantity = 0;
-
-  let cartArr = JSON.parse(localStorage.getItem("cart"));
-
-  cartArr &&
-    cartArr.forEach((item) => {
-      totalCartQuantity += item.quantity;
-    });
+  const totalCartQuantity = calculateCartQuantity();
 
   document.querySelector(".js-cart-quantity").textContent = totalCartQuantity;
-
-  localStorage.setItem("cart", JSON.stringify(cartArr));
 }
+
+export function updateCartItemCount() {
+    const totalCartQuantity = calculateCartQuantity();
+  
+    document.querySelector(".js-return-to-home-link").textContent =
+      totalCartQuantity === 1
+        ? `${totalCartQuantity} item`
+            : `${totalCartQuantity} items`;
+    
+    document.querySelector(".js-payment-summary-item-quamtity").textContent = `Items (${totalCartQuantity}):`
+       
+  }
 
 export function displayAddedMessage(productId) {
   let timeout;
@@ -56,11 +77,11 @@ export function displayAddedMessage(productId) {
 export function deleteCartItem(productId) {
   let cartArr = JSON.parse(localStorage.getItem("cart"));
   cartArr = cartArr.filter((item) => item.productId !== productId);
-    localStorage.setItem("cart", JSON.stringify(cartArr));
-    
+
+  saveToStorage(cartArr);
 }
 
-export function updateCartHeaderCount() {
-    document.querySelector(".js-return-to-home-link").textContent =
-      cart.length === 1 ? `${cart.length} item` : `${cart.length} items`;
-  }
+
+
+
+
