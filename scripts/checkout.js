@@ -3,6 +3,7 @@ import {
   deleteCartItem,
   updateCartItemCount,
   saveToStorage,
+  updateDeliveryOption,
 } from "../data/cart.js";
 import { products } from "../data/products.js";
 import { formatCurrency } from "./utils/currency.js";
@@ -14,8 +15,8 @@ let cartSummaryHTML = "";
 
 cart.forEach((cartItem) => {
   const productId = cartItem.productId;
-    const quantity = cartItem.quantity;
-    const deliveryOptionId = cartItem.deliveryOptionId;
+  const quantity = cartItem.quantity;
+  const deliveryOptionId = cartItem.deliveryOptionId;
 
   let matchingProduct;
 
@@ -25,14 +26,14 @@ cart.forEach((cartItem) => {
     }
   });
 
-    const { id, image, name, priceCents } = matchingProduct;
+  const { id, image, name, priceCents } = matchingProduct;
 
-    let deliveryOption;
-    deliveryOptions.forEach((option) => {
-      if (option.id === deliveryOptionId) {
-        deliveryOption = option;
-      }
-    });
+  let deliveryOption;
+  deliveryOptions.forEach((option) => {
+    if (option.id === deliveryOptionId) {
+      deliveryOption = option;
+    }
+  });
 
   cartSummaryHTML += `
     <div class="cart-item-container js-cart-item-${id}">
@@ -80,13 +81,16 @@ cart.forEach((cartItem) => {
 function deliveryOptionsHtml(id, deliveryOptionId) {
   let deliveryOptionsHTML = "";
   deliveryOptions.forEach((deliveryOption) => {
-    
     const formattedPrice =
-        deliveryOption.priceCents === 0 ? `FREE` : `$${formatCurrency(deliveryOption.priceCents)} -`;
-      
-      const isChecked = deliveryOptionId === deliveryOption.id ? "checked" : "";
+      deliveryOption.priceCents === 0
+        ? `FREE`
+        : `$${formatCurrency(deliveryOption.priceCents)} -`;
 
-    deliveryOptionsHTML += `<div class="delivery-option">
+    const isChecked = deliveryOptionId === deliveryOption.id ? "checked" : "";
+
+    deliveryOptionsHTML += `<div class="delivery-option js-delivery-option" data-delivery-option-id="${
+      deliveryOption.id
+    }" data-product-id="${id}">
             <input type="radio" ${isChecked} class="delivery-option-input"
               name="${id}">
             <div>
@@ -155,5 +159,12 @@ document.querySelectorAll(".js-save-quantity-link").forEach((link) => {
     document
       .querySelector(`.js-cart-item-${productId}`)
       .classList.remove("is-editing-quantity");
+  });
+});
+
+document.querySelectorAll(".js-delivery-option").forEach((option) => {
+  option.addEventListener("click", () => {
+    const { productId, deliveryOptionId } = option.dataset;
+    updateDeliveryOption(productId, deliveryOptionId);
   });
 });
