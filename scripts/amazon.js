@@ -4,7 +4,7 @@ import {
   displayAddedMessage,
 } from "../data/cart.js";
 import { products } from "../data/products.js";
-import { formatMoney } from "./utils/money.js";
+import { formatCurrency } from "./utils/money.js";
 
 updateCartQuantity();
 
@@ -30,7 +30,7 @@ products.forEach(({ id, image, name, rating, priceCents }) => {
         </div>
 
         <div class="product-price">
-          $${formatMoney(priceCents)}
+          $${formatCurrency(priceCents)}
         </div>
 
         <div class="product-quantity-container">

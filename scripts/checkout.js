@@ -5,13 +5,17 @@ import {
   saveToStorage,
 } from "../data/cart.js";
 import { products } from "../data/products.js";
-import { formatMoney } from "./utils/money.js";
+import { formatCurrency } from "./utils/currency.js";
+import { formatDate } from "./utils/date.js";
+import deliveryOptions from "../data/deliveryOptions.js";
+import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
 
 let cartSummaryHTML = "";
 
 cart.forEach((cartItem) => {
   const productId = cartItem.productId;
-  const quantity = cartItem.quantity;
+    const quantity = cartItem.quantity;
+    const deliveryOptionId = cartItem.deliveryOptionId;
 
   let matchingProduct;
 
@@ -21,12 +25,19 @@ cart.forEach((cartItem) => {
     }
   });
 
-  const { id, image, name, priceCents } = matchingProduct;
+    const { id, image, name, priceCents } = matchingProduct;
+
+    let deliveryOption;
+    deliveryOptions.forEach((option) => {
+      if (option.id === deliveryOptionId) {
+        deliveryOption = option;
+      }
+    });
 
   cartSummaryHTML += `
     <div class="cart-item-container js-cart-item-${id}">
     <div class="delivery-date">
-      Delivery date: Wednesday, June 15
+      Delivery date: ${formatDate(deliveryOption)}
     </div>
 
     <div class="cart-item-details-grid">
@@ -38,7 +49,7 @@ cart.forEach((cartItem) => {
           ${name}
         </div>
         <div class="product-price">
-          $${formatMoney(priceCents)}
+          $${formatCurrency(priceCents)}
         </div>
         <div class="product-quantity">
           <span>
@@ -59,48 +70,38 @@ cart.forEach((cartItem) => {
         <div class="delivery-options-title">
           Choose a delivery option:
         </div>
-
-        <div class="delivery-option">
-          <input type="radio" class="delivery-option-input"
-            name="${id}">
-          <div>
-            <div class="delivery-option-date">
-              Tuesday, June 21
-            </div>
-            <div class="delivery-option-price">
-              FREE Shipping
-            </div>
-          </div>
-        </div>
-        <div class="delivery-option">
-          <input type="radio" checked class="delivery-option-input"
-            name="${id}">
-          <div>
-            <div class="delivery-option-date">
-              Wednesday, June 15
-            </div>
-            <div class="delivery-option-price">
-              $4.99 - Shipping
-            </div>
-          </div>
-        </div>
-        <div class="delivery-option">
-          <input type="radio" class="delivery-option-input"
-            name="${id}">
-          <div>
-            <div class="delivery-option-date">
-              Monday, June 13
-            </div>
-            <div class="delivery-option-price">
-              $9.99 - Shipping
-            </div>
-          </div>
-        </div>
+        ${deliveryOptionsHtml(id, deliveryOptionId)}
       </div>
     </div>
   </div>
     `;
 });
+
+function deliveryOptionsHtml(id, deliveryOptionId) {
+  let deliveryOptionsHTML = "";
+  deliveryOptions.forEach((deliveryOption) => {
+    
+    const formattedPrice =
+        deliveryOption.priceCents === 0 ? `FREE` : `$${formatCurrency(deliveryOption.priceCents)} -`;
+      
+      const isChecked = deliveryOptionId === deliveryOption.id ? "checked" : "";
+
+    deliveryOptionsHTML += `<div class="delivery-option">
+            <input type="radio" ${isChecked} class="delivery-option-input"
+              name="${id}">
+            <div>
+              <div class="delivery-option-date">
+              ${formatDate(deliveryOption)}
+              </div>
+              <div class="delivery-option-price">
+                ${formattedPrice} Shipping
+              </div>
+            </div>
+          </div>`;
+  });
+
+  return deliveryOptionsHTML;
+}
 
 const cartSummary = document.querySelector(".js-order-summary");
 cartSummary.innerHTML = cartSummaryHTML;
@@ -132,11 +133,20 @@ document.querySelectorAll(".js-save-quantity-link").forEach((link) => {
     const productId = link.dataset.productId;
     let cartArr = cart;
     cartArr.forEach((item) => {
-        if (item.productId === productId) {
-         const newQuantity = Number(document.querySelector(`.js-quantity-input-${productId}`).value)
-            item.quantity = newQuantity
-            document.querySelector(`.js-quantity-label-${productId}`).textContent = newQuantity
-            
+      if (item.productId === productId) {
+        const newQuantity = Number(
+          document.querySelector(`.js-quantity-input-${productId}`).value
+        );
+
+        if (newQuantity < 1) {
+          alert("Quantity must be greater than 0");
+          return;
+        } else {
+          item.quantity = newQuantity;
+        }
+        document.querySelector(`.js-quantity-label-${productId}`).textContent =
+          newQuantity;
+
         saveToStorage(cartArr);
         updateCartItemCount();
       }

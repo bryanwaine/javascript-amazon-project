@@ -20,6 +20,7 @@ export function addToCart(productId, quantity, quantitySelectorValue) {
     : cartArr.push({
         productId,
         quantity,
+        deliveryOptionId: '1'
       });
 
   saveToStorage(cartArr);
