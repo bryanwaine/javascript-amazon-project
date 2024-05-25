@@ -54,7 +54,7 @@ export function updateCartItemCount() {
         ? `${totalCartQuantity} item`
             : `${totalCartQuantity} items`;
     
-    document.querySelector(".js-payment-summary-item-quamtity").textContent = `Items (${totalCartQuantity}):`
+    document.querySelector(".js-payment-summary-item-quantity").textContent = `Items (${totalCartQuantity}):`
        
   }
 
