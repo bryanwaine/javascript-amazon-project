@@ -7,12 +7,13 @@ import {
 } from "../../data/cart.js";
 import { getProductById } from "../../data/products.js";
 import { formatCurrency } from "../utils/currency.js";
-import { formatDate } from "../utils/date.js";
+import { calculateDeliveryDate } from "../utils/date.js";
 import {
   deliveryOptions,
   getDeliveryOptionById,
 } from "../../data/deliveryOptions.js";
 import renderPaymentSummary from "./paymentSummary.js";
+import renderCheckoutHeader from "./checkoutHeader.js";
 
 function renderOrderSummary() {
   let orderSummaryHTML = "";
@@ -33,7 +34,7 @@ function renderOrderSummary() {
     orderSummaryHTML += `
       <div class="cart-item-container js-cart-item-${id}">
       <div class="delivery-date">
-        Delivery date: ${formatDate(deliveryOption)}
+        Delivery date: ${calculateDeliveryDate(deliveryOption)}
       </div>
   
       <div class="cart-item-details-grid">
@@ -90,7 +91,7 @@ function renderOrderSummary() {
                 name="${id}">
               <div>
                 <div class="delivery-option-date">
-                ${formatDate(deliveryOption)}
+                ${calculateDeliveryDate(deliveryOption)}
                 </div>
                 <div class="delivery-option-price">
                   ${formattedPrice} Shipping
@@ -113,7 +114,9 @@ function renderOrderSummary() {
       deleteCartItem(productId);
       updateCartItemCount();
 
-      document.querySelector(`.js-cart-item-${productId}`).remove();
+      // document.querySelector(`.js-cart-item-${productId}`).remove();
+      renderCheckoutHeader();
+      renderOrderSummary();
       renderPaymentSummary();
     });
   });
@@ -149,6 +152,7 @@ function renderOrderSummary() {
           ).textContent = newQuantity;
 
           saveToStorage(cartArr);
+          renderCheckoutHeader();
           updateCartItemCount();
           renderPaymentSummary();
         }
@@ -164,6 +168,7 @@ function renderOrderSummary() {
     option.addEventListener("click", () => {
       const { productId, deliveryOptionId } = option.dataset;
       updateDeliveryOption(productId, deliveryOptionId);
+      renderCheckoutHeader();
       renderOrderSummary();
       renderPaymentSummary();
     });

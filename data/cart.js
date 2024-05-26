@@ -51,11 +51,6 @@ export function updateCartQuantity() {
 export function updateCartItemCount() {
   const totalCartQuantity = calculateCartQuantity();
 
-  document.querySelector(".js-return-to-home-link").textContent =
-    totalCartQuantity === 1
-      ? `${totalCartQuantity} item`
-      : `${totalCartQuantity} items`;
-
   document.querySelector(
     ".js-payment-summary-item-quantity"
   ).textContent = `Items (${totalCartQuantity}):`;
