@@ -1,5 +1,5 @@
 import {
-  cart,
+  getCart,
   deleteCartItem,
   updateCartItemCount,
   saveToStorage,
@@ -8,10 +8,16 @@ import {
 import { getProductById } from "../../data/products.js";
 import { formatCurrency } from "../utils/currency.js";
 import { formatDate } from "../utils/date.js";
-import {deliveryOptions, getDeliveryOptionById} from "../../data/deliveryOptions.js";
+import {
+  deliveryOptions,
+  getDeliveryOptionById,
+} from "../../data/deliveryOptions.js";
+import renderPaymentSummary from "./paymentSummary.js";
 
 function renderOrderSummary() {
   let orderSummaryHTML = "";
+
+  const cart = getCart();
 
   cart.forEach((cartItem) => {
     const productId = cartItem.productId;
@@ -22,7 +28,7 @@ function renderOrderSummary() {
 
     const { id, image, name, priceCents } = matchingProduct;
 
-    let deliveryOption = getDeliveryOptionById(deliveryOptionId)
+    let deliveryOption = getDeliveryOptionById(deliveryOptionId);
 
     orderSummaryHTML += `
       <div class="cart-item-container js-cart-item-${id}">
@@ -108,6 +114,7 @@ function renderOrderSummary() {
       updateCartItemCount();
 
       document.querySelector(`.js-cart-item-${productId}`).remove();
+      renderPaymentSummary();
     });
   });
 
@@ -143,6 +150,7 @@ function renderOrderSummary() {
 
           saveToStorage(cartArr);
           updateCartItemCount();
+          renderPaymentSummary();
         }
       });
 
@@ -157,6 +165,7 @@ function renderOrderSummary() {
       const { productId, deliveryOptionId } = option.dataset;
       updateDeliveryOption(productId, deliveryOptionId);
       renderOrderSummary();
+      renderPaymentSummary();
     });
   });
 }

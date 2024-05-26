@@ -1,4 +1,4 @@
-import { cart, updateCartItemCount } from "../../data/cart.js";
+import { getCart, updateCartItemCount } from "../../data/cart.js";
 import { getDeliveryOptionById } from "../../data/deliveryOptions.js";
 import { getProductById } from "../../data/products.js";
 import { formatCurrency } from "../utils/currency.js";
@@ -6,9 +6,11 @@ import { formatCurrency } from "../utils/currency.js";
 function renderPaymentSummary() {
   let paymentSummaryHTML = "";
 
+  let cartArr =  getCart();
+
   let totalPrice = 0;
   let totalShipping = 0;
-  cart.forEach((item) => {
+  cartArr.forEach((item) => {
     const product = getProductById(item.productId);
     totalPrice += item.quantity * product.priceCents;
 
@@ -27,7 +29,7 @@ function renderPaymentSummary() {
   const formattedTax = `$${formatCurrency(totalBeforeTax / 10)}`;
 
   const formattedOrderTotal = `$${formatCurrency(
-    totalBeforeTax + (totalBeforeTax / 10)
+    totalBeforeTax + totalBeforeTax / 10
   )}`;
 
   paymentSummaryHTML += `
@@ -62,13 +64,11 @@ function renderPaymentSummary() {
             Place your order
           </button>
     `;
-    
-    const paymentSummaryElement = document.querySelector(".js-payment-summary");
-    paymentSummaryElement.innerHTML = paymentSummaryHTML;
-    
-    updateCartItemCount();
-   
-    
+
+  const paymentSummaryElement = document.querySelector(".js-payment-summary");
+  paymentSummaryElement.innerHTML = paymentSummaryHTML;
+
+  updateCartItemCount();
 }
 
 export default renderPaymentSummary;
