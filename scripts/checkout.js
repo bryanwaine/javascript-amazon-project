@@ -6,4 +6,4 @@ renderPaymentSummary();
 renderOrderSummary();
 renderCheckoutHeader();
 
-
+  

@@ -4,7 +4,7 @@ import {
   displayAddedMessage,
 } from "../data/cart.js";
 import { products } from "../data/products.js";
-import { formatCurrency } from "./utils/currency.js";
+import { formatCurrency } from "./utils/currencyFormat.js";
 
 updateCartQuantity();
 
@@ -67,6 +67,7 @@ products.forEach(({ id, image, name, rating, priceCents }) => {
 
 document.querySelector(".products-grid").innerHTML = productsHTML;
 
+// Add to cart
 document.querySelectorAll(".js-add-to-cart").forEach((button) => {
     button.addEventListener("click", () => {
       
