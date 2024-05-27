@@ -1,16 +1,14 @@
-import { getCart, updateCartItemCount } from "../../data/cart.js";
-import { getDeliveryOptionById } from "../../data/deliveryOptions.js";
-import { getProductById } from "../../data/products.js";
+import { cart, updateCartItemCount } from "../data/cart.js";
+import { getDeliveryOptionById } from "../data/deliveryOptions.js";
+import { getProductById } from "../data/products.js";
 import { formatCurrency } from "../utils/currencyFormat.js";
 
 function renderPaymentSummary() {
   let paymentSummaryHTML = "";
 
-  let cartArr =  getCart();
-
   let totalPrice = 0;
   let totalShipping = 0;
-  cartArr.forEach((item) => {
+  cart.forEach((item) => {
     const product = getProductById(item.productId);
     totalPrice += item.quantity * product.priceCents;
 

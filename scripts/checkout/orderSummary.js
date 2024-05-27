@@ -1,24 +1,22 @@
 import renderPaymentSummary from "./paymentSummary.js";
 import renderCheckoutHeader from "./checkoutHeader.js";
 import {
-  getCart,
+  cart,
   deleteCartItem,
   updateCartItemCount,
   saveToStorage,
   updateDeliveryOption,
-} from "../../data/cart.js";
-import { getProductById } from "../../data/products.js";
+} from "../data/cart.js";
+import { getProductById } from "../data/products.js";
 import { formatCurrency } from "../utils/currencyFormat.js";
 import { calculateDeliveryDate } from "../utils/dateFormat.js";
 import {
   deliveryOptions,
   getDeliveryOptionById,
-} from "../../data/deliveryOptions.js";
+} from "../data/deliveryOptions.js";
 
 function renderOrderSummary() {
   let orderSummaryHTML = "";
-
-  const cart = getCart();
 
   cart.forEach((cartItem) => {
     const productId = cartItem.productId;

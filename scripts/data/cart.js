@@ -1,16 +1,20 @@
-export function getCart() {
-  const cart = JSON.parse(localStorage.getItem("cart")) || [];
-  return cart;
+export let cart;
+
+loadCartFromStorage();
+
+// get cart from local storage
+export function loadCartFromStorage() {
+  cart = JSON.parse(localStorage.getItem("cart")) || [];
 }
 
+// save to local storage
 export function saveToStorage(cart) {
   localStorage.setItem("cart", JSON.stringify(cart));
 }
 
+// add to cart
 export function addToCart(productId, quantity, quantitySelectorValue) {
   let matchingCartItem;
-
-  let cart = getCart();
 
   cart.forEach((item) => {
     if (productId === item.productId) {
@@ -29,10 +33,9 @@ export function addToCart(productId, quantity, quantitySelectorValue) {
   saveToStorage(cart);
 }
 
+// calculate cart quantity
 export function calculateCartQuantity() {
   let totalCartQuantity = 0;
-
-  let cart = getCart();
 
   cart &&
     cart.forEach((item) => {
@@ -42,6 +45,7 @@ export function calculateCartQuantity() {
   return totalCartQuantity;
 }
 
+// update cart quantity
 export function updateCartQuantity() {
   const totalCartQuantity = calculateCartQuantity();
 
@@ -56,6 +60,7 @@ export function updateCartItemCount() {
   ).textContent = `Items (${totalCartQuantity}):`;
 }
 
+// display added pop up message
 export function displayAddedMessage(productId) {
   let timeout;
 
@@ -73,16 +78,15 @@ export function displayAddedMessage(productId) {
   }, 2000);
 }
 
+// delete cart item
 export function deleteCartItem(productId) {
-  let cart = getCart();
   cart = cart.filter((item) => item.productId !== productId);
 
   saveToStorage(cart);
 }
 
+// update delivery option
 export function updateDeliveryOption(productId, deliveryOptionId) {
-  let cart = getCart();
-
   cart.forEach((item) => {
     if (item.productId === productId) {
       item.deliveryOptionId = deliveryOptionId;

@@ -2,8 +2,8 @@ import {
   addToCart,
   updateCartQuantity,
   displayAddedMessage,
-} from "../data/cart.js";
-import { products } from "../data/products.js";
+} from "./data/cart.js";
+import { products } from "./data/products.js";
 import { formatCurrency } from "./utils/currencyFormat.js";
 
 updateCartQuantity();
