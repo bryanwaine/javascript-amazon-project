@@ -30,7 +30,7 @@ function renderOrderSummary() {
     let deliveryOption = getDeliveryOptionById(deliveryOptionId);
 
     orderSummaryHTML += `
-      <div class="cart-item-container js-cart-item-${id}">
+      <div class="cart-item-container js-cart-item-container js-cart-item-${id}" data-product-id="${id}">
       <div class="delivery-date">
         Delivery date: ${calculateDeliveryDate(deliveryOption)}
       </div>
@@ -46,7 +46,7 @@ function renderOrderSummary() {
           <div class="product-price">
             $${formatCurrency(priceCents)}
           </div>
-          <div class="product-quantity">
+          <div class="product-quantity js-product-quantity-${id}">
             <span>
               Quantity: <span class="quantity-label js-quantity-label-${id}">${quantity}</span>
             </span>
@@ -55,7 +55,7 @@ function renderOrderSummary() {
             </span>
             <input class="quantity-input js-quantity-input-${id}" type="number" value="${quantity}">
             <span class="save-quantity-link link-primary js-save-quantity-link" data-product-id="${id}">Save</span>
-            <span class="delete-quantity-link link-primary js-delete-cart-item" data-product-id="${id}">
+            <span class="delete-quantity-link js-delete-quantity-link-${id} link-primary js-delete-cart-item" data-product-id="${id}">
               Delete
             </span>
           </div>
@@ -103,8 +103,6 @@ function renderOrderSummary() {
 
   const orderSummaryElement = document.querySelector(".js-order-summary");
   orderSummaryElement.innerHTML = orderSummaryHTML;
-
-  updateCartItemCount();
 
   // Delete cart item
   document.querySelectorAll(".js-delete-cart-item").forEach((button) => {

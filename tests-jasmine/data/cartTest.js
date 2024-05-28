@@ -5,6 +5,7 @@ import {
 } from "../../scripts/data/cart.js";
 
 describe("test suite: addToCart", () => {
+    
   it("should add an existing item to the cart", () => {
     spyOn(Object.getPrototypeOf(localStorage), "setItem");
     spyOn(Object.getPrototypeOf(localStorage), "getItem").and.callFake(() => {
