@@ -26,3 +26,15 @@ export function getDeliveryOptionById(deliveryOptionId) {
 
   return deliveryOption || deliveryOptions[0]
 }
+
+export function validDeliveryOption(deliveryOptionId) {
+  let valid = false
+
+  deliveryOptions.forEach((option) => {
+    if (option.id === deliveryOptionId) {
+      valid = true
+    }
+  });
+
+  return valid;
+}

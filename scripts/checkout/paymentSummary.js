@@ -35,12 +35,12 @@ function renderPaymentSummary() {
 
           <div class="payment-summary-row">
             <div class="js-payment-summary-item-quantity"></div>
-            <div class="payment-summary-money">${formattedTotal}</div>
+            <div class="payment-summary-money js-payment-summary-items-total">${formattedTotal}</div>
           </div>
 
           <div class="payment-summary-row">
             <div>Shipping &amp; handling:</div>
-            <div class="payment-summary-money">${formattedShipping}</div>
+            <div class="payment-summary-money js-payment-summary-shipping">${formattedShipping}</div>
           </div>
 
           <div class="payment-summary-row subtotal-row">

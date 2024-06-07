@@ -1,3 +1,5 @@
+import { validDeliveryOption } from "./deliveryOptions.js";
+
 export let cart;
 
 loadCartFromStorage();
@@ -17,9 +19,10 @@ export function addToCart(productId, quantity, quantitySelectorValue) {
   let matchingCartItem;
 
   cart.forEach((item) => {
-    if (productId === item.productId) {
-      matchingCartItem = item;
+    if (productId !== item.productId) {
+      return;
     }
+    matchingCartItem = item;
   });
 
   matchingCartItem
@@ -86,11 +89,24 @@ export function deleteCartItem(productId) {
 }
 
 // update delivery option
-export function updateDeliveryOption(productId, deliveryOptionId) {
+export function updateDeliveryOption(
+  productId,
+  deliveryOptionId,
+) {
   cart.forEach((item) => {
+    let matchingCartItem;
+
     if (item.productId === productId) {
-      item.deliveryOptionId = deliveryOptionId;
+      matchingCartItem = item;
     }
+    if (!matchingCartItem) {
+      return;
+    }
+    if (!validDeliveryOption(deliveryOptionId)) {
+      return;
+    }
+
+    matchingCartItem.deliveryOptionId = deliveryOptionId;
+    saveToStorage(cart);
   });
-  saveToStorage(cart);
 }

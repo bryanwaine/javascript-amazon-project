@@ -1,5 +1,7 @@
 import renderOrderSummary from "../../scripts/checkout/orderSummary.js";
+import renderPaymentSummary from "../../scripts/checkout/paymentSummary.js";
 import { loadCartFromStorage, cart } from "../../scripts/data/cart.js";
+import { deliveryOptions } from "../../scripts/data/deliveryOptions.js";
 
 describe("test suite: renderOrderSummary", () => {
   const productId1 = "e43638ce-6aa0-4b85-b27f-e1d07eb678c6";
@@ -31,8 +33,8 @@ describe("test suite: renderOrderSummary", () => {
     });
 
     loadCartFromStorage();
-
     renderOrderSummary();
+    renderPaymentSummary();
   });
 
   afterEach(() => {
@@ -49,6 +51,15 @@ describe("test suite: renderOrderSummary", () => {
     expect(
       document.querySelector(`.js-product-quantity-${productId2}`).innerText
     ).toContain(`Quantity: 3`);
+    expect(
+      document.querySelector(`.js-product-name-${productId1}`).innerText
+    ).toContain(`Black and Gray Athletic Cotton Socks - 6 Pairs`);
+    expect(
+      document.querySelector(`.js-product-name-${productId2}`).innerText
+    ).toContain(`Intermediate Size Basketball`);
+    expect(
+      document.querySelector(`.js-product-price-${productId2}`).innerText
+    ).toContain(`$`);
   });
 
   it("should remove a product", () => {
@@ -68,5 +79,32 @@ describe("test suite: renderOrderSummary", () => {
     );
     expect(cart.length).toEqual(1);
     expect(cart[0].productId).toEqual(productId2);
+    expect(
+      document.querySelector(`.js-product-name-${productId2}`).innerText
+    ).toContain(`Intermediate Size Basketball`);
+    expect(document.querySelector(`.js-product-name-${productId1}`)).toBeNull();
+  });
+
+  it("should update the delivery option", () => {
+    document
+      .querySelector(
+        `.js-delivery-option-${productId1}-${deliveryOptions[2].id}`
+      )
+      .click();
+
+    expect(
+      document.querySelector(
+        `.js-delivery-option-input-${productId1}-${deliveryOptions[2].id}`
+      ).checked
+    ).toEqual(true);
+    expect(cart.length).toEqual(2);
+    expect(cart[0].deliveryOptionId).toEqual(deliveryOptions[2].id);
+    expect(cart[0].productId).toEqual(productId1);
+    expect(
+      document.querySelector(`.js-payment-summary-items-total`).innerText
+    ).toContain(`$73.75`);
+    expect(
+      document.querySelector(`.js-payment-summary-shipping`).innerText
+    ).toContain(`$14.98`);
   });
 });
