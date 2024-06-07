@@ -25,37 +25,35 @@ function renderOrderSummary() {
 
     const matchingProduct = getProductById(productId);
 
-    const { id, image, name, priceCents } = matchingProduct;
-
     let deliveryOption = getDeliveryOptionById(deliveryOptionId);
 
     orderSummaryHTML += `
-      <div class="cart-item-container js-cart-item-container js-cart-item-${id}" data-product-id="${id}">
+      <div class="cart-item-container js-cart-item-container js-cart-item-${matchingProduct.id}" data-product-id="${matchingProduct.id}">
       <div class="delivery-date">
         Delivery date: ${calculateDeliveryDate(deliveryOption)}
       </div>
   
       <div class="cart-item-details-grid">
         <img class="product-image"
-          src="${image}">
+          src="${matchingProduct.image}">
   
         <div class="cart-item-details">
-          <div class="product-name js-product-name-${id}">
-            ${name}
+          <div class="product-name js-product-name-${matchingProduct.id}">
+            ${matchingProduct.name}
           </div>
-          <div class="product-price js-product-price-${id}">
-            $${formatCurrency(priceCents)}
+          <div class="product-price js-product-price-${matchingProduct.id}">
+            ${matchingProduct.getPrice()}
           </div>
-          <div class="product-quantity js-product-quantity-${id}">
+          <div class="product-quantity js-product-quantity-${matchingProduct.id}">
             <span>
-              Quantity: <span class="quantity-label js-quantity-label-${id}">${quantity}</span>
+              Quantity: <span class="quantity-label js-quantity-label-${matchingProduct.id}">${quantity}</span>
             </span>
-            <span class="update-quantity-link link-primary js-update-quantity-link" data-product-id="${id}">
+            <span class="update-quantity-link link-primary js-update-quantity-link" data-product-id="${matchingProduct.id}">
               Update
             </span>
-            <input class="quantity-input js-quantity-input-${id}" type="number" value="${quantity}">
-            <span class="save-quantity-link link-primary js-save-quantity-link" data-product-id="${id}">Save</span>
-            <span class="delete-quantity-link js-delete-quantity-link-${id} link-primary js-delete-cart-item" data-product-id="${id}">
+            <input class="quantity-input js-quantity-input-${matchingProduct.id}" type="number" value="${matchingProduct.quantity}">
+            <span class="save-quantity-link link-primary js-save-quantity-link" data-product-id="${matchingProduct.id}">Save</span>
+            <span class="delete-quantity-link js-delete-quantity-link-${matchingProduct.id} link-primary js-delete-cart-item" data-product-id="${matchingProduct.id}">
               Delete
             </span>
           </div>
@@ -65,7 +63,7 @@ function renderOrderSummary() {
           <div class="delivery-options-title">
             Choose a delivery option:
           </div>
-          ${deliveryOptionsHtml(id, deliveryOptionId)}
+          ${deliveryOptionsHtml(matchingProduct.id, deliveryOptionId)}
         </div>
       </div>
     </div>
