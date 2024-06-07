@@ -4,17 +4,15 @@ export let cart;
 
 loadCartFromStorage();
 
-// get cart from local storage
 export function loadCartFromStorage() {
   cart = JSON.parse(localStorage.getItem("cart")) || [];
+  console.log(cart)
 }
 
-// save to local storage
 export function saveToStorage(cart) {
   localStorage.setItem("cart", JSON.stringify(cart));
 }
 
-// add to cart
 export function addToCart(productId, quantity, quantitySelectorValue) {
   let matchingCartItem;
 
@@ -36,7 +34,6 @@ export function addToCart(productId, quantity, quantitySelectorValue) {
   saveToStorage(cart);
 }
 
-// calculate cart quantity
 export function calculateCartQuantity() {
   let totalCartQuantity = 0;
 
@@ -48,7 +45,6 @@ export function calculateCartQuantity() {
   return totalCartQuantity;
 }
 
-// update cart quantity
 export function updateCartQuantity() {
   const totalCartQuantity = calculateCartQuantity();
 
@@ -63,7 +59,6 @@ export function updateCartItemCount() {
   ).textContent = `Items (${totalCartQuantity}):`;
 }
 
-// display added pop up message
 export function displayAddedMessage(productId) {
   let timeout;
 
@@ -81,14 +76,12 @@ export function displayAddedMessage(productId) {
   }, 2000);
 }
 
-// delete cart item
-export function deleteCartItem(productId) {
+export function removeFromCart(productId) {
   cart = cart.filter((item) => item.productId !== productId);
 
   saveToStorage(cart);
 }
 
-// update delivery option
 export function updateDeliveryOption(
   productId,
   deliveryOptionId,
@@ -110,3 +103,4 @@ export function updateDeliveryOption(
     saveToStorage(cart);
   });
 }
+

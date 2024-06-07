@@ -4,7 +4,7 @@ import {
   addToCart,
   loadCartFromStorage,
   updateDeliveryOption,
-  deleteCartItem,
+  removeFromCart,
 } from "../../scripts/data/cart.js";
 
 const productId1 = "e43638ce-6aa0-4b85-b27f-e1d07eb678c6";
@@ -58,7 +58,7 @@ describe("test suite: addToCart", () => {
   });
 });
 
-describe("test suite: deleteCartItem ", () => {
+describe("test suite: removeFromCart ", () => {
   beforeEach(() => {
     document.querySelector(".js-test-container").innerHTML = `
         <div class="js-checkout-header"></div>
@@ -117,7 +117,7 @@ describe("test suite: deleteCartItem ", () => {
   });
 
   it("should remove a productId that is not in the cart", () => {
-    deleteCartItem("not-a-valid-id");
+    removeFromCart("not-a-valid-id");
 
     expect(cart.length).toEqual(2);
     expect(localStorage.setItem).toHaveBeenCalledTimes(1);

@@ -2,7 +2,7 @@ import renderPaymentSummary from "./paymentSummary.js";
 import renderCheckoutHeader from "./checkoutHeader.js";
 import {
   cart,
-  deleteCartItem,
+  removeFromCart,
   updateCartItemCount,
   saveToStorage,
   updateDeliveryOption,
@@ -108,7 +108,7 @@ function renderOrderSummary() {
   document.querySelectorAll(".js-delete-cart-item").forEach((button) => {
     button.addEventListener("click", () => {
       const productId = button.dataset.productId;
-      deleteCartItem(productId);
+      removeFromCart(productId);
       updateCartItemCount();
 
       // document.querySelector(`.js-cart-item-${productId}`).remove();
