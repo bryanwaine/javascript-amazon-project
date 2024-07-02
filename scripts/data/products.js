@@ -34,7 +34,7 @@ export class Clothing extends Product {
 
   constructor(product) {
     super(product);
-    this.type = product.type
+    this.type = product.type;
     this.sizeChartLink = product.sizeChartLink;
   }
 
@@ -53,10 +53,10 @@ export class Appliance extends Product {
   warrantyLink;
 
   constructor(product) {
-    super(product)
-    this.type = product.type
-    this.instructionsLink = product.instructionsLink
-    this.warrantyLink = product.warrantyLink
+    super(product);
+    this.type = product.type;
+    this.instructionsLink = product.instructionsLink;
+    this.warrantyLink = product.warrantyLink;
   }
 
   extraInfoHtml() {
@@ -71,6 +71,33 @@ export class Appliance extends Product {
   }
 }
 
+export let products = [];
+
+export function loadProducts(fn) {
+  const xhr = new XMLHttpRequest();
+
+  xhr.addEventListener("load", () => {
+    products = JSON.parse(xhr.response).map((product) => {
+      if (product.type === "clothing") {
+        return new Clothing(product);
+      }
+      if (product.type === "appliance") {
+        return new Appliance(product);
+      }
+      return new Product(product);
+    });
+
+    console.log("products loaded");
+    // Run function to render products after products are loaded
+    fn()
+  });
+
+  xhr.open("GET", "https://supersimplebackend.dev/products");
+
+  xhr.send();
+}
+
+/*
 export const products = [
   {
     id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
@@ -563,6 +590,7 @@ export const products = [
   }
   return new Product(product);
 });
+*/
 
 export function getProductById(productId) {
   let matchingProduct;

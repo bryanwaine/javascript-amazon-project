@@ -3,15 +3,16 @@ import {
   updateCartQuantity,
   displayAddedMessage,
 } from "./data/cart.js";
-import { products } from "./data/products.js";
+import { products, loadProducts } from "./data/products.js";
 
-
+loadProducts(renderProducts);
 updateCartQuantity();
 
-let productsHTML = "";
+function renderProducts() {
+  let productsHTML = "";
 
-products.forEach((product) => {
-  productsHTML += `
+  products.forEach((product) => {
+    productsHTML += `
       <div class="product-container">
         <div class="product-image-container">
           <img class="product-image" src="${product.image}">
@@ -65,26 +66,26 @@ products.forEach((product) => {
         </button>
       </div> 
     `;
-});
-
-document.querySelector(".products-grid").innerHTML = productsHTML;
-
-// Add to cart
-document.querySelectorAll(".js-add-to-cart").forEach((button) => {
-    button.addEventListener("click", () => {
-      
-    const { productId, productQuantity } = button.dataset;
-
-    const quantitySelectorValue = Number(
-      document.querySelector(`.js-quantity-selector-${productId}`).value
-    );
-
-    const quantity = Number(productQuantity) + quantitySelectorValue;
-
-    addToCart(productId, quantity, quantitySelectorValue);
-
-    updateCartQuantity();
-
-    displayAddedMessage(productId);
   });
-});
+
+  document.querySelector(".products-grid").innerHTML = productsHTML;
+
+  // Add to cart
+  document.querySelectorAll(".js-add-to-cart").forEach((button) => {
+    button.addEventListener("click", () => {
+      const { productId, productQuantity } = button.dataset;
+
+      const quantitySelectorValue = Number(
+        document.querySelector(`.js-quantity-selector-${productId}`).value
+      );
+
+      const quantity = Number(productQuantity) + quantitySelectorValue;
+
+      addToCart(productId, quantity, quantitySelectorValue);
+
+      updateCartQuantity();
+
+      displayAddedMessage(productId);
+    });
+  });
+}
